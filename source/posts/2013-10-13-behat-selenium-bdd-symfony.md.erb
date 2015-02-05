@@ -1,0 +1,427 @@
+---
+date: 2013-10-13 09:20:00
+title: BDD development in Symfony using real browsers
+priority: 0.9
+changefreq: daily
+categories:
+- Symfony
+- Tips
+tags:
+- symfony
+- bdd
+- behat
+- selenium
+- phantomjs
+- unit test
+- testing
+- browser
+---
+
+Unit testing is nice, behaviour testing is awesome!
+
+Said that, everyone should run at least some unit tests, even if your application is simple. If you want to go a step further you can run behaviour tests, that means create features, stories, not just simple tests.
+
+But what's exactly a story?
+
+> Behaviour-driven development is an “outside-in” methodology. It starts at the outside by identifying business outcomes, and then drills down into the feature set that will achieve those outcomes. Each feature is captured as a “story”, which defines the scope of the feature along with its acceptance criteria.
+
+> <a href="http://dannorth.net/whats-in-a-story/" target="_blank">What&#8217;s in a Story? | Dan North &amp; Associates</a>
+
+Let's see how to implement this kind of tests into a <a href="http://symfony.com" target="_blank">Symfony 2</a> application. I will guide you into adding behaviour tests against real browsers (and headless ones) giving also a real example you can run on your own.
+
+### Setup the project
+
+Lets start by checking out a Symfony 2 standard application (be sure to have composer in your PATH):
+
+```bash
+composer create-project symfony/framework-standard-edition bdd-test/ 2.3.6
+```
+
+After completing the setup we have a running Symfony application with its default page:
+
+<p class="text-center">
+  <a href="/images/posts/symfony_default.png" rel="lightbox"> thumbnail('posts/symfony_default.png', :medium, :class => 'img-responsive')</a>
+</p>
+
+### Installing components
+
+To run our tests on a real browsers we need these components:
+
+ - <a href="http://behat.org/" target="_blank">Behat</a>: "A php framework for testing your business expectations"
+ - <a href="http://mink.behat.org/" target="_blank">Mink</a>: let us run tests on real browser interfacing with different drivers
+ - <a href="http://docs.seleniumhq.org/" target="_blank">Selenium</a>: browser automation tool
+ - <a href="http://phantomjs.org/" target="_blank">PhantomJS</a>: headless WebKit browser
+
+#### Behat
+
+Let's start by adding behat support into our newly created application, to do so we need to add these requirements into our `composer.json`:
+
+```json
+"require": {
+  "behat/symfony2-extension": "*"
+}
+```
+
+and run `composer update behat/symfony2-extension` to install it. Note that I haven't required directly `behat/behat` since I got issues trying to install both but the Symfony extension installs it already as it's a dependency.
+
+Now that we have installed behat as a dependecy of our project we need to initialize the features folder where we're going to add our tests. To do so on the project root run:
+
+```bash
+./bin/behat --init
+```
+
+It will create a folder called _features_ and a class _FeatureContext_ where we'll place our step definitions later.
+
+As we've installed the Symfony extension behat will use Symfony autoloader to find the context class so we need to either move it into our autoloading path or edit composer.json to autoload the bootstrap files for us. For simplicity I've decided to include the bootstrap folder into our autoloader, to do so open `composer.json` and change this autoload definition:
+
+```json
+"autoload": {
+    "psr-0": { "": "src/" }
+}
+```
+
+with this one:
+
+```json
+"autoload": {
+    "psr-0": { "": ["src/", "features/bootstrap/"] }
+},
+```
+
+and run `composer install` to recreate the autoloader. This will make out context class discoverable.
+
+Now it's time to configure Behat. Create a file called `behat.yml` into the project root adding this content:
+
+```yaml
+default:
+    paths:
+        features:   features        # The folder where the features are stored
+    context:
+        class:      FeatureContext      # The context class
+    extensions:
+        Behat\Symfony2Extension\Extension:  # Settings for the symfony extension
+            kernel:
+                env: test
+                debug: true
+```
+
+Now behat should run correctly, running `./bin/behat` should give you this self explanatory output:
+
+```bash
+No scenarios
+No steps
+0m0.001s
+```
+
+##### Optional step
+
+Since we have the Symfony extension we can inject our application kernel inside the context class, to do so let our class implement the `Behat\Symfony2Extension\Context\KernelAwareInterface` class and create a `setKernel` function like this:
+
+```php
+<?php
+/**
+ * Sets the context kernel
+ *
+ * @param KernelInterface $kernel
+ */
+public function setKernel(KernelInterface $kernel)
+{
+    $this->kernel = $kernel;
+    $this->container = $kernel->getContainer();
+}
+```
+
+This way we can use the kernel and container inside the context. It can be useful.
+
+#### Mink
+
+Since we need to interact with real browsers we need to install mink as dependency, as usual we can do that adding these requirements into our `composer.json`:
+
+```json
+"require": {
+  "behat/mink-browserkit-driver": "*",
+  "behat/mink-extension": "*",
+    "behat/mink-selenium2-driver": "*"
+}
+```
+
+and run:
+
+```bash
+composer update behat/mink-extension behat/mink-selenium2-driver behat/mink-browserkit-driver
+```
+
+To add mink support we need to edit our `behat.yml` adding mink support into Symfony extension and adding a configuration for the mink component. We should end with this configuration:
+
+```yaml
+default:
+    paths:
+        features:   features              # The folder where the features are stored
+    context:
+        class:      FeatureContext            # The context class
+    extensions:
+        Behat\Symfony2Extension\Extension:        # Settings for the symfony extension
+            mink_driver:        true          # Enable mink driver
+            kernel:
+                env: test
+                debug: true
+        Behat\MinkExtension\Extension:          # Mink configuration
+            base_url:           http://localhost:8000   # PHP built-in server url
+            default_session:    symfony2        # Use symfony webdriver for standard tests
+            browser_name:       firefox         # Use firefox when running test via the selenium driver
+            javascript_session: selenium2         # Use selenium driver with javascript scenarios
+            selenium2:
+                wd_host:        http://127.0.0.1:4444/wd/hub # Selenium url
+```
+
+Lets explain this a bit. Since we've set `default_session` to _symfony2_ be default mink calls symfony using it's built-in webdriver, so without the real browser, this is done just to make some tests faster. Instead, when you tag a scenario using the `@javascript` annotation it will use the selenium2 driver, which uses a real browser.
+
+You can read more about mink drivers <a href="http://mink.behat.org/#different-browsers-drivers" target="_blank">here</a>.
+
+#### Selenium and PhantomJS
+
+To install <a href="http://docs.seleniumhq.org/" target="_blank">Selenium</a> and <a href="http://phantomjs.org/" target="_blank">PhantomJS</a> you need to follow the instructions in their respective websites. If you're on MAC OSX and you have <a href="http://brew.sh/" target="_blank">Homebrew</a> installed you can just:
+
+```bash
+brew install phantomjs selenium-server-standalone
+```
+
+> In this post I'm going to use firefox to show you how to run tests using a real browser, I'm writing about PhantomJS since is what you should have to run tests on your CI server
+
+### Real test example
+
+Back to our Symfony app, lets create a real test. I'm going to add to the default page a modal with a button to click that closes the modal.
+
+The default demo page is located at `src/Acme/DemoBundle/Resources/views/Demo/index.html.twig`. Adding this html creates a modal that is shown on the center of the page:
+
+```html
+<div class="modal" style="position: fixed; top:50%; left: 50%; width: 500px; height: 300px; margin-left: -250px; margin-top: -150px; background-color: darkgray">
+    <button style="position: absolute; left: 50%; top: 50%; width: 150px; height: 40px; font-size: 25px; margin-left: -75px; margin-top: -20px;">Close me!</button>
+</div>
+```
+
+This is our not so pretty result:
+
+<p class="text-center">
+  <a href="/images/posts/symfony_bdd_modal.png" rel="lightbox">thumbnail('posts/symfony_bdd_modal.png', :medium, :class => 'img-responsive')</a>
+</p>
+
+Actually the button doesn't do anything, but this is the important part: **Tests has to first fail, then get fixed and pass**.
+
+It's now time to write our feature, that button, clicked, has to close the modal.
+
+Our first feature, called `modalbutton.feature` will be this:
+
+```feature
+Feature: Button click closes modal
+  In order to close the modal
+  As a visitor
+  I have to click on the button
+
+@javascript
+Scenario:
+  Given I am on page "/demo/"
+  When  I click on button "Close me!"
+  Then  There should be no modal visible
+```
+
+We haven't created any step right now and trying to run behat gives this output:
+
+```
+eature: Button click closes modal
+  In order to close the modal
+  As a visitor
+  I have to click on the button
+
+  @javascript
+  Scenario:                               # features/modalbutton.feature:7
+    Given I am on page "/demo/"
+    When I click on button "Close me!"
+    Then There should be no modal visible
+
+1 scenario (1 undefined)
+3 steps (3 undefined)
+0m0.032s
+
+You can implement step definitions for undefined steps with these snippets:
+
+    /**
+     * @Given /^I am on page "([^"]*)"$/
+     */
+    public function iAmOnPage($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @When /^I click on button "([^"]*)"$/
+     */
+    public function iClickOnButton($arg1)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then /^There should be no modal visible$/
+     */
+    public function thereShouldBeNoModalVisible()
+    {
+        throw new PendingException();
+    }
+```
+
+It automatically tell us which step we need to define so we can start from those to make our tests.
+Lets created the first one, the aim of the step is to navigate with the browser to an URL, in this case the root of our project, this is what it should look like:
+
+```php
+<?php
+/**
+ * @Given /^I am on page "([^"]*)"$/
+ */
+public function iAmOnPage($url)
+{
+    // Get the browser session (a new one is created on each scenario)
+    $session = $this->getSession();
+    // Visit a page (locatePath prepends the url with the base_url we've defined in behat.yml)
+    $session->visit($this->locatePath($url));
+}
+
+/**
+ * @When /^I click on button "([^"]*)"$/
+ */
+public function iClickOnButton($text)
+{
+    throw new PendingException();
+}
+
+/**
+ * @Then /^There should be no modal visible$/
+ */
+public function thereShouldBeNoModalVisible()
+{
+    throw new PendingException();
+}
+```
+Remember to change the class to extend `\Behat\MinkExtension\Context\MinkContext` since we're using it for browser interaction, you need also to run your Selenium server (on MAC OSX you can run it via `java -jar /usr/local/opt/selenium-server-standalone/selenium-server-standalone-2.35.0.jar -p 4444`).
+
+Running the test now opens a firefox session (Selenium finds it automatically on MAC OSX) showing the demo page and it closes right after loading, behat now stops the test since we've implemented only the first step and we need to go further with the others:
+
+```
+Feature: Button click closes modal
+  In order to close the modal
+  As a visitor
+  I have to click on the button
+
+  @javascript
+  Scenario:                               # features/modalbutton.feature:7
+    Given I am on page "/demo/"           # FeatureContext::iAmOnPage()
+    When I click on button "Close me!"    # FeatureContext::iClickOnButton()
+      TODO: write pending definition
+    Then There should be no modal visible # FeatureContext::thereShouldBeNoModalVisible()
+
+1 scenario (1 pending)
+3 steps (1 passed, 1 skipped, 1 pending)
+0m9.741s
+```
+
+First test passes since the page loaded, now we need to write the second step, clicking on a button. Mink provides automatically a way to find buttons and click on them, this is how I've implemented the second step:
+
+```php
+<?php
+
+/**
+ * @When /^I click on button "([^"]*)"$/
+ */
+public function iClickOnButton($text)
+{
+    // Get the page we visited in the previous step
+    $page = $this->getSession()->getPage();
+    // Search for a button with the $text id|text|title
+    $button = $page->findButton($text);
+
+    // If not found throw an exception
+    if (null === $button) {
+        throw new \InvalidArgumentException('Element not found');
+    }
+
+    // Otherwise click on it
+    $button->click();
+}
+```
+
+You should see Firefox opening the page and clicking on the button, we can now write the third step: check that clicking on the button has closed the modal. For this we're using the `$session->evaluateScript()` function to check that the modal window has been closed (remember to add jquery to the page).
+
+> Sometimes tests are too fast for the browser and you may have to add a `$session->wait()` for a couple of milliseconds before checking for actions being done.
+
+This is the third step, where we check that the modal has been closed:
+
+```php
+<?php
+
+/**
+ * @Then /^There should be no modal visible$/
+ */
+public function thereShouldBeNoModalVisible()
+{
+    if ($this->getSession()->evaluateScript("return $('.modal').is(':visible')")) {
+        throw new \Exception('Modal is visible');
+    }
+}
+```
+
+Remember to always add a return to your javascript scripts otherwise you'll get `null` even if on the browser console it returns a value. As you can imagine, running the behat test will fail because the button actually doesn't hide the modal:
+
+```
+Feature: Button click closes modal
+  In order to close the modal
+  As a visitor
+  I have to click on the button
+
+  @javascript
+  Scenario:                               # features/modalbutton.feature:7
+    Given I am on page "/demo/"           # FeatureContext::iAmOnPage()
+    When I click on button "Close me!"    # FeatureContext::iClickOnButton()
+    Then There should be no modal visible # FeatureContext::thereShouldBeNoModalVisible()
+      Modal is visible
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+0m2.385s
+```
+
+Now that we have a failing test we can fix it by adding this simple Javascript into our page:
+
+```javascript
+$(document).ready(function() {
+  $('.modal button').click(function() {
+    $('.modal').hide();
+  });
+});
+```
+
+If you run the behat tests again they all pass! YAY!
+
+```
+Feature: Button click closes modal
+  In order to close the modal
+  As a visitor
+  I have to click on the button
+
+  @javascript
+  Scenario:                               # features/modalbutton.feature:7
+    Given I am on page "/demo/"           # FeatureContext::iAmOnPage()
+    When I click on button "Close me!"    # FeatureContext::iClickOnButton()
+    Then There should be no modal visible # FeatureContext::thereShouldBeNoModalVisible()
+
+1 scenario (1 passed)
+3 steps (3 passed)
+0m2.22s
+```
+
+This is a small screencast of behat in action:
+
+<p class="text-center">
+  <a href="/images/posts/symfony_bdd_demo.gif" rel="lightbox">thumbnail('posts/symfony_bdd_demo.png', :medium, :class => 'img-responsive')</a>
+</p>
+
+If you have any question feel free to drop a comment ;)

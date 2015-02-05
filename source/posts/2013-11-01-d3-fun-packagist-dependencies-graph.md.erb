@@ -1,0 +1,232 @@
+---
+date: 2013-11-01 13:00:00
+title: D3.js fun with packagist dependencies
+priority: 0.9
+changefreq: daily
+categories:
+- Tips
+tags:
+- d3
+- js
+- graph
+- dependency
+- packagist
+- composer
+- chord
+---
+
+Starting playing with d3.js and the <a href="http://packagist.org/" target="_blank">packagist</a> API, I've tried to create dependency graph using from one or more packages you can select.
+
+Just write the package name you want read dependencies of and it will display them in a nice chord graph layout. You can add packages how many times you want (as soon as your browser is able to handle it).
+
+READMORE
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"></script>
+
+<style>
+#svg-container div {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+}
+
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+</style>
+
+<form>
+    <div>
+        <span>Select a package to show dependencies of:</span>
+        <input id="package-selector" type="text" />
+        <span>Autocomplete can take a while (1.3MB to download)</span>
+    </div>
+</form>
+<div id="svg-container" style="margin-top: 15px; width: 100%; height: 0; padding-bottom: 100%">
+  <div>Use the input above to add some packages</div>
+</div>
+
+<script type="text/javascript">
+var selectedElements = [];
+var availableElements = null;
+
+$(document).ready(function() {
+  $.getJSON('/demo/packagist-dependency-graph/packages_output.json', function(data) {
+    availableElements = data;
+  });
+  $('#package-selector').typeahead({
+    name: 'packages',
+    valueKey: 'name',
+    prefetch: '/demo/packagist-dependency-graph/packages_output.json'
+  }).on('typeahead:selected', function(el, data) {
+    $('#package-selector').typeahead('setQuery', '');
+    addDependency(data, true);
+  });
+});
+
+
+
+function addDependency(el, deep) {
+  var found = false;
+  selectedElements.forEach(function(d) {
+    if (d.name == el.name) {
+      found = true;
+    }
+  });
+
+  if (!found) {
+    selectedElements.push(el);
+    if (deep) {
+      el.requires.forEach(function(req) {
+        availableElements.forEach(function(ael) {
+          if (ael.name == req) {
+            addDependency(ael, true);
+          }
+        });
+      });
+    }
+  }
+
+  updateGraph();
+}
+
+var width = $('#svg-container').innerWidth();
+var height = $('#svg-container').innerHeight()
+var r1 = width / 2;
+var r0 = r1 - width * 0.20;
+
+function updateGraph() {
+  var fill = d3.scale.category20c();
+  var arc = d3.svg.arc()
+    .innerRadius(r0)
+    .outerRadius(r0 + 20);
+
+  var chord = d3.layout.chord()
+    .padding(.04);
+
+  d3.select('#svg-container').select('svg').remove();
+  d3.select('#svg-container').select('div').remove();
+
+  var svg = d3.select('#svg-container').append('svg:svg')
+      .attr('width', width)
+      .attr('height', height)
+    .append('svg:g')
+      .attr('transform', 'translate(' + r1 + ',' + r1 + ')');
+
+  var packages = JSON.parse(JSON.stringify(selectedElements));
+  var indexByName = {},
+    nameByIndex = {},
+    matrix = [],
+    n = 0;
+
+  packages.forEach(function(d) {
+    req = d.requires;
+    d = d.name;
+    if (!(d in indexByName)) {
+      nameByIndex[n] = d;
+      indexByName[d] = n++;
+    }
+  });
+
+  packages.forEach(function(d) {
+    req = d.requires;
+    req.forEach(function(d) {
+      if (!(d in indexByName)) {
+        nameByIndex[n] = d;
+        indexByName[d] = n++;
+        packages.push({ name: d, requires: [] })
+      }
+    });
+  });
+
+  packages.forEach(function(d) {
+    var source = indexByName[d.name],
+      row = matrix[source];
+    if (!row) {
+      row = matrix[source] = [];
+      for (var i = -1; ++i < n;) row[i] = 0;
+    }
+    d.requires.forEach(function(d) { row[indexByName[d]]++; });
+  });
+
+  chord.matrix(matrix);
+
+  var g = svg.selectAll("g.group")
+        .data(chord.groups)
+      .enter().append("svg:g")
+        .attr("class", "group");
+
+    g.append("svg:path")
+        .style("fill", function(d) { return fill(d.index); })
+        .style("stroke", function(d) { return fill(d.index); })
+        .attr("d", arc);
+
+    g.append("svg:text")
+        .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
+        .attr("dy", ".35em")
+        .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
+        .attr("transform", function(d) {
+          return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+              + "translate(" + (r0 + 26) + ")"
+              + (d.angle > Math.PI ? "rotate(180)" : "");
+        })
+        .text(function(d) { return nameByIndex[d.index]; });
+
+    svg.selectAll("path.chord")
+        .data(chord.chords)
+      .enter().append("svg:path")
+        .attr("class", "chord")
+        .style("stroke", function(d) { return d3.rgb(fill(d.source.index)).darker(); })
+        .style("fill", function(d) { return fill(d.source.index); })
+        .attr("d", d3.svg.chord().radius(r0));
+}
+</script>
+
+I hope to learn more of this awesome library to create more fancy examples ;)

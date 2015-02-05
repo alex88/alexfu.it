@@ -1,0 +1,54 @@
+!!!
+%html
+  %head
+    %meta{charset: 'utf-8'}/
+    %meta{content: 'IE=edge;chrome=1', 'http-equiv': 'X-UA-Compatible'}/
+    %meta{content: 'width=device-width, initial-scale=1', name: 'viewport'}
+    %title
+      Alexfu#{' - ' + current_article.title unless current_article.nil?}
+    = feed_tag :atom, "#{blog.options.prefix.to_s}/feed.xml", title: 'Atom Feed'
+    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Open+Sans:800,700,600,500,400,300'
+    = stylesheet_link_tag 'application'
+    = javascript_include_tag 'application', defer: true
+    = javascript_include_tag '//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-54d3b1c61ecccfe2', async: true
+
+
+  %body{ class: page_classes }
+    - if content_for?(:body_content)
+      = yield_content :body_content
+    - else
+      .container
+        - if content_for?(:container_content)
+          = yield_content :container_content
+        - else
+          .row
+            .col-xs-12.col-md-3.sidebar
+              .text-center
+                .avatar
+                  - unless current_page.url == '/'
+                    = link_to '/index.html' do
+                      = image_tag 'avatar.jpg', alt: 'Avatar', class: 'photo'
+                  - else
+                    = image_tag 'avatar.jpg', alt: 'Avatar', class: 'photo'
+                  %h3 Alessandro Tagliapietra
+                %p
+                  = link_to 'mailto:tagliapietra.alessandro@gmail.com' do
+                    %i.fa.fa-envelope.fa-fw
+                  = link_to 'https://twitter.com/4l3x88' do
+                    %i.fa.fa-twitter.fa-fw
+                  = link_to 'https://github.com/alex88' do
+                    %i.fa.fa-github.fa-fw
+                  = link_to 'https://it.linkedin.com/pub/alessandro-tagliapietra/3a/49/8b5/it' do
+                    %i.fa.fa-linkedin.fa-fw
+                  = link_to 'http://fb.co/tagliapietra.alessandro' do
+                    %i.fa.fa-facebook.fa-fw
+                  = link_to 'skype:tagliapietra.alessandro88?chat' do
+                    %i.fa.fa-skype.fa-fw
+                %p
+                  Software Engineer at
+                  = link_to 'Visup', 'http://visup.it', target: '_blank'
+                %p
+                  = link_to 'About | Resume', '/resume.html'
+                %nav
+            .col-xs-12.col-md-9
+              = yield

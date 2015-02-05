@@ -1,0 +1,157 @@
+@import variables
+
+/* Resume page */
+body.resume
+  .back
+    display: inline-block
+    margin-top: 20px
+    font-size: 1.4em
+
+  .photo-header
+    margin-top: -70px
+
+    .photo
+      width: 160px
+      height: 160px
+      border-radius: 50%
+      padding: 5px
+      background: $body-bg
+      overflow: hidden
+      display: inline-block
+
+      img
+        width: 150px
+        height: 150px
+        border-radius: 50%
+
+    .text
+      margin: 0px
+      padding: 0px
+      font-size: 2.4em
+      font-weight: 700
+      text-transform: uppercase
+      letter-spacing: -1px
+
+      span
+        color: $brand-primary
+
+      &::first-line
+        font-size: 1.5em
+        font-weight: 800
+        letter-spacing: -4px
+        line-height: 1.5em
+
+  .box
+    margin-bottom: 20px
+    overflow: auto
+
+    h2
+      font-size: 1.8em
+      font-weight: 600
+      color: $brand-primary-light
+      text-transform: uppercase
+
+      &:before
+        content: '//'
+        margin-right: 5px
+
+    p
+      font-size: 1.3em
+      line-height: 1.5em
+
+    &.contact .contact-item
+      width: 100%
+      float: left
+
+      & > .icon
+        padding: 10px
+        border-right: 1px solid #aaa
+        border-bottom: 1px solid #aaa
+        opacity: 0.2
+
+        i
+          font-size: 2em
+      & > .title
+        width: 80%
+        width: calc(100% - 55px)
+        font-size: 1.5em
+        font-weight: 700
+
+        &.alone
+          margin-top: 10px
+
+      & > .description
+        width: 80%
+        width: calc(100% - 55px)
+        font-size: 1.2em
+        opacity: 0.7
+
+      &:last-child > .icon
+        border-bottom: 0px
+
+    &.languages .language
+      font-size: 1.3em
+      margin: 10px 0px
+      padding-bottom: 10px
+      border-bottom: 1px solid rgba(#aaa, 0.2)
+
+      &:last-child
+        margin-bottom: 0px
+
+      .rating .fa-star
+        color: $brand-primary-light
+
+    &.hobbies
+      .badge
+        margin-right: 2px
+        margin-bottom: 4px
+
+    &.jobs .job
+      margin-bottom: 15px
+
+      .where
+        font-size: 1.4em
+        font-weight: bold
+
+      .year
+        font-size: 1.4em
+        font-weight: bold
+
+      .profession
+        font-size: 1.5em
+        font-weight: bold
+
+      .description
+        font-size: 1.2em
+        line-height: 1.5em
+
+    &.projects .project
+      margin-bottom: 15px
+
+      .name
+        font-size: 1.4em
+        font-weight: bold
+
+      .description, .technology
+        font-size: 1.2em
+        line-height: 1.5em
+
+        .title
+          font-weight: bold
+
+    &.skills
+      .item-skills
+        height: 36px
+        background: #F0563D
+        color: #ffffff
+        padding: 5px 10px
+        margin-bottom: 5px
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+        font-size: 1.3em
+        font-weight: 600
+
+        @for $i from 0 through 10
+          &.size-#{$i}0
+            width: #{$i}0%

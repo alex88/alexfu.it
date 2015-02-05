@@ -1,0 +1,133 @@
+= content_for :container_content do
+  .row
+    .col-xs-12
+      = link_to '/index.html', class: 'back' do
+        %i.fa.fa-arrow-circle-left
+        Back to index
+      .photo-header
+        .text-center
+          = link_to '/index.html' do
+            .photo
+              = image_tag 'avatar.jpg', alt: 'Avatar'
+          %h1.text
+            Hello,
+            %br/
+            I'm
+            %span Alessandro
+            and this is my resume/cv
+
+  .row
+    .col-xs-12.col-sm-7
+      .box
+        %h2 About me
+        %p= lorem.sentences 5
+      .box.jobs
+        %h2 Experiences
+        .job.clearfix
+          .col-xs-3
+            .where Google
+            .year 2013 - 2014
+          .col-xs-9
+            .profession Front-end developer / php programmer
+            .description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam, et, illum perferendis veritatis velit sunt similique qui magni totam harum tempore eius laboriosam accusantium necessitatibus voluptatum? Enim, itaque dignissimos quia.
+        .job.clearfix
+          .col-xs-3
+            .where Twitter
+            .year 2012
+          .col-xs-9
+            .profession Web Developer
+            .description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam, nihil sit nemo voluptatem praesentium. Quia, qui facere consectetur libero asperiores fugiat consequuntur deserunt culpa repudiandae sed quidem voluptas explicabo soluta.
+      .box.projects
+        %h2 Projects
+        .project.clearfix
+          .col-xs-3
+            .name Closr.it
+          .col-xs-9
+            .description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam, et, illum perferendis veritatis velit sunt similique qui magni totam harum tempore eius laboriosam accusantium necessitatibus voluptatum? Enim, itaque dignissimos quia.
+            .technology
+              .title Technologies:
+              .text AWS Ruby
+      .box
+        %h2 Where I live
+        %iframe{ frameBorder: 0, width: '100%', height: '300px', src: 'https://a.tiles.mapbox.com/v4/alex88.l3558nao/attribution.html?access_token=pk.eyJ1IjoiYWxleDg4IiwiYSI6InlzUzBlbWsifQ.OQjesfjDxWSpicoGjpHYKQ#3/50.90/6.15' }
+    .col-xs-12.col-sm-5
+      .box.contact
+        %h2 Contact me
+        .contact-item
+          .icon.pull-left.text-center
+            %i.fa.fa-envelope.fa-fw
+          .title.alone.pull-right
+            tagliapietra.alessandro@gmail.com
+        .contact-item
+          .icon.pull-left.text-center
+            %i.fa.fa-twitter.fa-fw
+          .title.pull-right
+            Twitter
+          .description.pull-right
+            = link_to 'https://twitter.com/4l3x88', 'https://twitter.com/4l3x88', target: '_blank'
+        .contact-item
+          .icon.pull-left.text-center
+            %i.fa.fa-github.fa-fw
+          .title.pull-right
+            Github
+          .description.pull-right
+            = link_to 'https://github.com/alex88', 'https://github.com/alex88', target: '_blank'
+        .contact-item
+          .icon.pull-left.text-center
+            %i.fa.fa-linkedin.fa-fw
+          .title.pull-right
+            Linkedin
+          .description.pull-right
+            = link_to 'https://it.linkedin.com/pub/alessandro-tagliapietra/3a/49/8b5/it', 'https://it.linkedin.com/pub/alessandro-tagliapietra/3a/49/8b5/it', target: '_blank'
+        .contact-item
+          .icon.pull-left.text-center
+            %i.fa.fa-facebook.fa-fw
+          .title.pull-right
+            Facebook
+          .description.pull-right
+            = link_to 'http://fb.co/tagliapietra.alessandro', 'http://fb.co/tagliapietra.alessandro', target: '_blank'
+        .contact-item
+          .icon.pull-left.text-center
+            %i.fa.fa-skype.fa-fw
+          .title.pull-right
+            Skype
+          .description.pull-right
+            = link_to 'tagliapietra.alessandro88', 'skype:tagliapietra.alessandro88?chat'
+      .box.skills
+        %h2 Skills
+        .skills
+          .item-skills.size-90 Ruby (RoR)
+          .item-skills.size-80 Javascript (AngularJS, Ember.js)
+          .item-skills.size-80 PHP (Symfony, Laravel)
+          .item-skills.size-30 Python
+          .item-skills.size-30 Scala (Play, Akka)
+          .item-skills.size-10 Go
+          .clearfix
+
+      .box.languages
+        %h2 Languages
+        .language
+          Italian
+          .rating.pull-right
+            %i.fa.fa-star
+            %i.fa.fa-star
+            %i.fa.fa-star
+            %i.fa.fa-star
+            %i.fa.fa-star
+        .clearfix
+        .language
+          English
+          .rating.pull-right
+            %i.fa.fa-star
+            %i.fa.fa-star
+            %i.fa.fa-star
+            %i.fa.fa-star-o
+            %i.fa.fa-star-o
+      .box.hobbies
+        %h2 Hobbies
+        %span.badge Volleyball
+        %span.badge Programming
+        %span.badge Online Gaming
+        %span.badge Reading
+        %span.badge Workout
+        %span.badge Photography
