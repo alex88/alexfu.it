@@ -1,0 +1,13 @@
+machine:
+  ruby:
+    version: 2.2.0
+
+test:
+  override:
+    - bundle exec middleman build
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - bundle exec middleman s3_sync

@@ -39,6 +39,16 @@ activate :blog do |blog|
 end
 activate :directory_indexes
 
+activate :gzip
+activate :s3_sync do |s3|
+  s3.bucket                     = ENV['S3_BUCKET']
+  s3.region                     = ENV['S3_BUCKET_REGION']
+  s3.aws_access_key_id          = ENV['AWS_ACCESS_KEY_ID']
+  s3.aws_secret_access_key      = ENV['AWS_SECRET_ACCESS_KEY']
+  s3.reduced_redundancy_storage = true
+end
+default_caching_policy max_age: 600
+
 configure :development do
   activate :livereload
   set :debug_assets, true

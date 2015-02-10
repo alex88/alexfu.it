@@ -11,6 +11,7 @@ gem 'nokogiri'
 gem 'kramdown'
 gem 'middleman-syntax'
 gem 'middleman-thumbnailer', github: 'nhemsley/middleman-thumbnailer'
+gem 'middleman-s3_sync'
 
 # Asssets
 gem 'font-awesome-sass'
