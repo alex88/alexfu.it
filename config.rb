@@ -36,9 +36,7 @@ activate :blog do |blog|
   blog.layout = 'blog_post'
 end
 activate :directory_indexes
-activate :asset_hash
-# Fix for woff2 files, will be fixed in middleman 4
-extensions.find{ |e| e[0] == :asset_hash }[1].options.setting(:exts).value.push '.woff2'
+activate :asset_hash, exts: %w(.jpg .jpeg .png .gif .webp .js .css .otf .woff .woff2 .eot .ttf .svg)
 activate :gzip
 activate :s3_sync do |s3|
   s3.bucket                     = ENV['S3_BUCKET']
