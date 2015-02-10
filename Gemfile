@@ -12,6 +12,7 @@ gem 'kramdown'
 gem 'middleman-syntax'
 gem 'middleman-thumbnailer', github: 'nhemsley/middleman-thumbnailer'
 gem 'middleman-s3_sync'
+gem 'middleman-pry'
 
 # Asssets
 gem 'font-awesome-sass'

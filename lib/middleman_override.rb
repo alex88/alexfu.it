@@ -44,3 +44,16 @@ module Middleman::Cli
     end
   end
 end
+
+module Middleman
+  module Sprockets
+
+    class Asset
+      private
+
+      def is_font_by_extension?
+        has_extname?(*%w(.ttf .woff .woff2 .eot .otf .svg .svgz))
+      end
+    end
+  end
+end

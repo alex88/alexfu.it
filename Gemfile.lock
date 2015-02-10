@@ -30,6 +30,7 @@ GEM
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chunky_png (1.3.3)
+    coderay (1.1.0)
     coffee-script (2.3.0)
       coffee-script-source
       execjs
@@ -50,7 +51,7 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
     erubis (2.7.0)
-    eventmachine (1.0.6)
+    eventmachine (1.0.7)
     excon (0.44.1)
     execjs (2.3.0)
     ffi (1.9.6)
@@ -151,6 +152,7 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     map (6.5.5)
+    method_source (0.8.2)
     middleman (3.3.7)
       coffee-script (~> 2.2)
       compass (>= 1.0.0, < 2.0.0)
@@ -182,6 +184,9 @@ GEM
       em-websocket (~> 0.5.1)
       middleman-core (>= 3.3)
       rack-livereload (~> 0.3.15)
+    middleman-pry (0.0.4)
+      middleman-core (~> 3.2)
+      pry (~> 0.9)
     middleman-s3_sync (3.0.41)
       ansi (~> 1.4.3)
       fog (>= 1.25.0)
@@ -214,6 +219,10 @@ GEM
     padrino-support (0.12.4)
       activesupport (>= 3.1)
     pmap (1.0.2)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rack (1.6.0)
     rack-livereload (0.3.15)
       rack
@@ -229,6 +238,7 @@ GEM
     rouge (1.8.0)
     ruby-progressbar (1.7.1)
     sass (3.4.11)
+    slop (3.6.0)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -265,6 +275,7 @@ DEPENDENCIES
   middleman
   middleman-blog
   middleman-livereload
+  middleman-pry
   middleman-s3_sync
   middleman-syntax
   middleman-thumbnailer!
