@@ -14,12 +14,12 @@ tags:
 - scaling
 ---
 
-During the last complete rebuild of <a href="http://goalshouter.com/" target="_blank">Goalshouter</a> we needed to redesign our infrastructure to handle the big traffic we were expecting.
+During the last complete rebuild of [Goalshouter](http://goalshouter.com/){:target='_blank'} we needed to redesign our infrastructure to handle the big traffic we were expecting.
 
 Our biggest difference between an everyday site is that 80% of the traffic is concentrated in some hours of sunday because most of the soccer matches are at that time.
 We needed a solution that was being able to scale fast to a large number of servers.
 
-According to <a href="http://newrelic.com" target="_blank">New Relic</a> on sunday afternoon the requests per second increases by 20x in a couple of minutes. Our match processing tool is a bit resource intensive and we need enough power to let teams track their matches and people follow them.
+According to [New Relic](http://newrelic.com){:target='_blank'} on sunday afternoon the requests per second increases by 20x in a couple of minutes. Our match processing tool is a bit resource intensive and we need enough power to let teams track their matches and people follow them.
 
 READMORE
 
@@ -33,15 +33,15 @@ I've decided to divide our application into three main components:
 
 ### MySql XtraDB Cluster
 
-First of all I've installed <a href="http://www.percona.com/software/percona-xtradb-cluster" target="_blank">Percona XtraDB Cluster</a> on three dedicated servers which easily handle our writing needs while providing us an high available solution which never had a failure since we've started.
+First of all I've installed [Percona XtraDB Cluster](http://www.percona.com/software/percona-xtradb-cluster){:target='_blank'} on three dedicated servers which easily handle our writing needs while providing us an high available solution which never had a failure since we've started.
 
-You can easily install it on your own following this simple <a href="http://www.percona.com/doc/percona-xtradb-cluster/howtos/ubuntu_howto.html" target="_blank">tutorial</a> and you'll end up with a working MySql cluster powered by the enhanced InnoDB version called <a href="http://www.percona.com/software/percona-xtradb" target="_blank">XtraDB</a>.
+You can easily install it on your own following this simple [tutorial](http://www.percona.com/doc/percona-xtradb-cluster/howtos/ubuntu_howto.html){:target='_blank'} and you'll end up with a working MySql cluster powered by the enhanced InnoDB version called [XtraDB](http://www.percona.com/software/percona-xtradb){:target='_blank'}.
 
 ## AWS OpsWorks
 
 The MySql cluster is the only part we've left off Amazon Web Services for performance and pricing reasons, we don't need to scale it so fast since the number of writes we're going to handle is predictable and the price of such performant machines is less than we would have paid for on AWS.
 
-<a href="http://aws.amazon.com/opsworks/" target="_blank">OpsWorks</a> is a new deployment & management tool available on the AWS console which let you deploy orchestrate your application servers using chef recipes or built-in components.
+[OpsWorks](http://aws.amazon.com/opsworks/){:target='_blank'} is a new deployment & management tool available on the AWS console which let you deploy orchestrate your application servers using chef recipes or built-in components.
 
 ### Stacks
 
@@ -66,7 +66,7 @@ Let's see how I've configured these layers:
 
 Let's start by the simplier layer, the MySql masters proxy. Its role is to handle all writing requests from the frontend webserver and the replication connections from the MySql slaves and proxy those to a working (connected to the cluster) MySql dedicated server we've talked before.
 
-To do that I've installed the ```haproxy``` package via layer settings and after installing <a href="https://github.com/olafz/percona-clustercheck" target="_blank">clustercheck</a> on our masters I've created a chef recipe that uses this template for setting up HAProxy:
+To do that I've installed the ```haproxy``` package via layer settings and after installing [clustercheck](https://github.com/olafz/percona-clustercheck){:target='_blank'} on our masters I've created a chef recipe that uses this template for setting up HAProxy:
 
 ``` erb
 global
@@ -107,7 +107,7 @@ listen mysql-cluster 0.0.0.0:3306
 
 In this case ```@masters``` is an array of IP addresses or hostnames which HAProxy should check the availability and proxy traffic to them. The masters variable, along with the statspwd has been set via the stack's configuration json.
 
-You should set the recipe to be run on instance's setup stage, you can read more about at lifecycle events <a href="http://aws.amazon.com/opsworks/faqs/#lifecycle" target="_blank">here</a>.
+You should set the recipe to be run on instance's setup stage, you can read more about at lifecycle events [here](http://aws.amazon.com/opsworks/faqs/#lifecycle){:target='_blank'}.
 
 #### MySql slaves
 
@@ -211,7 +211,7 @@ else
 			Chef::Log.info("Setting master to #{master_config[:hostname]}")
 
 			m = Mysql.new('localhost', 'root', new_root_pwd)
-			
+
 			command = %Q{
 				CHANGE MASTER TO
 				MASTER_HOST="#{master_config[:hostname]}",
@@ -376,7 +376,7 @@ Now the core of our application, the webservers running the Symfony application.
 
 First of all create a custom stack, tell OpsWorks to install these packages: ```nginx-full, php5-fpm, php5-cli, php5-curl, php5-gd, php-apc, php5-mysql, php5-intl, curl, git, php5-memcached```, additionally if you want to compress assets using Google closure install also ```openjdk-6-jre```.
 
-Then if you plan to use more than one machine (otherwise why are you reading this?) you should create an Elastic Load Balancer from your EC2 console and attach it to the layer and also an ElastiCache cluster to store your Symfony sessions if you don't want users being logged out everytime they make another request (ELB doesn't stick users to instances until you tell him to do so in <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/US_StickySessions.html" target="_blank">this way</a>).
+Then if you plan to use more than one machine (otherwise why are you reading this?) you should create an Elastic Load Balancer from your EC2 console and attach it to the layer and also an ElastiCache cluster to store your Symfony sessions if you don't want users being logged out everytime they make another request (ELB doesn't stick users to instances until you tell him to do so in [this way](http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/US_StickySessions.html){:target='_blank'}).
 
 Now that you have your server installed you need to create a chef recipe to do these things:
 
@@ -639,7 +639,7 @@ Here you can see different configuration pieces have been used:
 ##### Application deploy
 
 Now it's time for maybe the most essential part, the deploy recipe. As the name advice it has to be set on the runlist of the deploy lifecycle event.
-The recipe role is to deploy a new application version fetching the code from git (or whatever the chef <a href="http://docs.opscode.com/resource_deploy.html" target="_blank">deploy resource</a> is able to handle) and run the post fetch scripts like warming up cache, dumping assets and restarting php5-fpm to clear apc cache.
+The recipe role is to deploy a new application version fetching the code from git (or whatever the chef [deploy resource](http://docs.opscode.com/resource_deploy.html){:target='_blank'} is able to handle) and run the post fetch scripts like warming up cache, dumping assets and restarting php5-fpm to clear apc cache.
 
 Here it is:
 

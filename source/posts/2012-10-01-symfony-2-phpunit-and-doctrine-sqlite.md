@@ -1,6 +1,8 @@
 ---
 date: 2012-10-01 23:09:58
 title: Symfony 2.1, PHPUnit and Doctrine fixtures using SQLite
+priority: 0.9
+changefreq: daily
 categories:
 - Symfony
 tags:
@@ -37,7 +39,7 @@ and into your app/AppKernel.php page add these two lines:
 
 > It would be nice to load these modules only in test and/or dev environments, just compare them with $this->getEnvironment()
 
-Last thing is to configure our test environement to use the bundles and the test SQLite db. So edit app/config/config_test.yml and add:
+Last thing is to configure our test environement to use the bundles and the test SQLite db. So edit `app/config/config_test.yml` and add:
 
 ``` yaml
 doctrine:
@@ -58,7 +60,7 @@ liip_functional_test:
 ### Usage
 
 
-First step for using fixtures is to create a sample data which will be used in tests. Suppose we want to load some users and we've created our user bundle called Acme/UserBundle, let's create a file _src/Acme/UserBundle/DataFixtures/ORM/LoadUserData.php_ with this content:
+First step for using fixtures is to create a sample data which will be used in tests. Suppose we want to load some users and we've created our user bundle called Acme/UserBundle, let's create a file `src/Acme/UserBundle/DataFixtures/ORM/LoadUserData.php` with this content:
 
 ``` php
 <?php

@@ -25,9 +25,9 @@ But what's exactly a story?
 
 > Behaviour-driven development is an “outside-in” methodology. It starts at the outside by identifying business outcomes, and then drills down into the feature set that will achieve those outcomes. Each feature is captured as a “story”, which defines the scope of the feature along with its acceptance criteria.
 
-> <a href="http://dannorth.net/whats-in-a-story/" target="_blank">What&#8217;s in a Story? | Dan North &amp; Associates</a>
+> [What's in a Story? \| Dan North & Associates](http://dannorth.net/whats-in-a-story/){:target='_blank'}
 
-Let's see how to implement this kind of tests into a <a href="http://symfony.com" target="_blank">Symfony 2</a> application. I will guide you into adding behaviour tests against real browsers (and headless ones) giving also a real example you can run on your own.
+Let's see how to implement this kind of tests into a [Symfony 2](http://symfony.com){:target='_blank'} application. I will guide you into adding behaviour tests against real browsers (and headless ones) giving also a real example you can run on your own.
 
 ### Setup the project
 
@@ -39,18 +39,16 @@ composer create-project symfony/framework-standard-edition bdd-test/ 2.3.6
 
 After completing the setup we have a running Symfony application with its default page:
 
-<p class="text-center">
-  <a href="/images/posts/symfony_default.png" rel="lightbox"> thumbnail('posts/symfony_default.png', :medium, :class => 'img-responsive')</a>
-</p>
+<%= thumbnail_tag 'posts/symfony-bdd/symfony_default.png', :post %>
 
 ### Installing components
 
 To run our tests on a real browsers we need these components:
 
- - <a href="http://behat.org/" target="_blank">Behat</a>: "A php framework for testing your business expectations"
- - <a href="http://mink.behat.org/" target="_blank">Mink</a>: let us run tests on real browser interfacing with different drivers
- - <a href="http://docs.seleniumhq.org/" target="_blank">Selenium</a>: browser automation tool
- - <a href="http://phantomjs.org/" target="_blank">PhantomJS</a>: headless WebKit browser
+ - [Behat](http://behat.org/){:target='_blank'}: "A php framework for testing your business expectations"
+ - [Mink](http://mink.behat.org/){:target='_blank'}: let us run tests on real browser interfacing with different drivers
+ - [Selenium](http://docs.seleniumhq.org/){:target='_blank'}: browser automation tool
+ - [PhantomJS](http://phantomjs.org/){:target='_blank'}: headless WebKit browser
 
 #### Behat
 
@@ -85,7 +83,7 @@ with this one:
 ```json
 "autoload": {
     "psr-0": { "": ["src/", "features/bootstrap/"] }
-},
+}
 ```
 
 and run `composer install` to recreate the autoloader. This will make out context class discoverable.
@@ -180,7 +178,7 @@ You can read more about mink drivers <a href="http://mink.behat.org/#different-b
 
 #### Selenium and PhantomJS
 
-To install <a href="http://docs.seleniumhq.org/" target="_blank">Selenium</a> and <a href="http://phantomjs.org/" target="_blank">PhantomJS</a> you need to follow the instructions in their respective websites. If you're on MAC OSX and you have <a href="http://brew.sh/" target="_blank">Homebrew</a> installed you can just:
+To install [Selenium](http://docs.seleniumhq.org/){:target='_blank'} and [PhantomJS](http://phantomjs.org/){:target='_blank'} you need to follow the instructions in their respective websites. If you're on MAC OSX and you have [Homebrew](http://brew.sh/){:target='_blank'} installed you can just:
 
 ```bash
 brew install phantomjs selenium-server-standalone
@@ -202,9 +200,7 @@ The default demo page is located at `src/Acme/DemoBundle/Resources/views/Demo/in
 
 This is our not so pretty result:
 
-<p class="text-center">
-  <a href="/images/posts/symfony_bdd_modal.png" rel="lightbox">thumbnail('posts/symfony_bdd_modal.png', :medium, :class => 'img-responsive')</a>
-</p>
+<%= thumbnail_tag 'posts/symfony-bdd/symfony_bdd_modal.png', :post %>
 
 Actually the button doesn't do anything, but this is the important part: **Tests has to first fail, then get fixed and pass**.
 
@@ -420,8 +416,6 @@ Feature: Button click closes modal
 
 This is a small screencast of behat in action:
 
-<p class="text-center">
-  <a href="/images/posts/symfony_bdd_demo.gif" rel="lightbox">thumbnail('posts/symfony_bdd_demo.png', :medium, :class => 'img-responsive')</a>
-</p>
+<%= thumbnail_tag 'posts/symfony-bdd/symfony_bdd_demo.png', :post, link_to: '/images/posts/symfony-bdd/symfony_bdd_demo.gif' %>
 
 If you have any question feel free to drop a comment ;)

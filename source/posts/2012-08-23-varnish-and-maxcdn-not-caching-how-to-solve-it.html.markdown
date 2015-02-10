@@ -1,6 +1,8 @@
 ---
 title: Varnish and MaxCdn not caching, how to solve it
 date: 2012-08-23 15:05:06
+priority: 0.9
+changefreq: daily
 tags:
 - varnish
 - cdn

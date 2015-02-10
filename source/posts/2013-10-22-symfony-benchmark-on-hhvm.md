@@ -15,7 +15,7 @@ tags:
 - php-fpm
 ---
 
-Yesterday <a href="https://twitter.com/iam_asm89/" target="_blank">Asm89</a> blogged about a custom version of symfony edited to run on Facebook's <a href="http://www.hiphop-php.com/" target="_blank">HHVM</a>. I've followed his great blog post (you can read it <a href="http://labs.qandidate.com/blog/2013/10/21/running-symfony-standard-on-hhvm/" target="_blank">here</a>) in how to setup HHVM to run the Symfony standard web application.
+Yesterday [Asm89](https://twitter.com/iam_asm89/){:target='_blank'} blogged about a custom version of symfony edited to run on Facebook's [HHVM](http://www.hiphop-php.com/){:target='_blank'}. I've followed his great blog post (you can read it [here](http://labs.qandidate.com/blog/2013/10/21/running-symfony-standard-on-hhvm/){:target='_blank'}) in how to setup HHVM to run the Symfony standard web application.
 
 After that I've tested the performances compared to a nginx + php-fpm configuration and I wanted to share the results here.
 
@@ -25,11 +25,11 @@ READMORE
 
 ##### Test setup
 
-I've run the tests on a vagrant VM on a i5 3750k with assigned 4 cores. The box was running Ubuntu 12.04 64-bit. I've installed both HHVM and nginx + php-fpm on the same box running on different ports. Nginx and php-fpm was tuned following <a href="http://rtcamp.com/tutorials/php/fpm-sysctl-tweaking/" target="_blank">this</a> article and php-fpm with `max_children = 10`.
+I've run the tests on a vagrant VM on a i5 3750k with assigned 4 cores. The box was running Ubuntu 12.04 64-bit. I've installed both HHVM and nginx + php-fpm on the same box running on different ports. Nginx and php-fpm was tuned following [this](http://rtcamp.com/tutorials/php/fpm-sysctl-tweaking/){:target='_blank'} article and php-fpm with `max_children = 10`.
 
 #### Tests
 
-I've used <a href="http://httpd.apache.org/docs/2.2/programs/ab.html" target="_blank">apache bench</a> to test the default symfony webapp demo page using the production environment, all tests used 2000 requests with 1, 10, 50, 100 concurrent clients.
+I've used [apache bench](http://httpd.apache.org/docs/2.2/programs/ab.html){:target='_blank'} to test the default symfony webapp demo page using the production environment, all tests used 2000 requests with 1, 10, 50, 100 concurrent clients.
 
 This is what I've got, enjoy.
 
@@ -203,7 +203,7 @@ As I've already said, this is just Symfony standard application, you can get wor
 
 ### Complexity heads up!
 
-This is just an hello world example, as pointed out on Twitter by <a href="https://twitter.com/chregu/status/392675452663640064" target="_blank">@chregu</a> when more work has to be done by PHP, HHVM performs better than PHP 5.5 + OPcache.
+This is just an hello world example, as pointed out on Twitter by [@chregu](https://twitter.com/chregu/status/392675452663640064){:target='_blank'} when more work has to be done by PHP, HHVM performs better than PHP 5.5 + OPcache.
 
 As a simple test I've tried to run this function:
 

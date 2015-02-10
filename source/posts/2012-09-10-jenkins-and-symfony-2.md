@@ -1,6 +1,8 @@
 ---
 date: 2012-09-10 19:11:17
 title: Jenkins and Symfony 2.1
+priority: 0.9
+changefreq: daily
 categories:
 - Symfony
 tags:

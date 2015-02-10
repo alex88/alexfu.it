@@ -17,7 +17,7 @@ tags:
 - php-fpm
 ---
 
-Using Symfony's <a href="http://symfony.com/doc/current/book/performance.html#caching-the-autoloader-with-apc" target="_blank">APC autoloader</a> you can improve performance by caching the location of each class. During a deploy, however, you may need to clear APC cache to be sure that if you move a class, things still works.
+Using Symfony's [APC autoloader](http://symfony.com/doc/current/book/performance.html#caching-the-autoloader-with-apc){:target='_blank'} you can improve performance by caching the location of each class. During a deploy, however, you may need to clear APC cache to be sure that if you move a class, things still works.
 
 READMORE
 
@@ -25,7 +25,7 @@ READMORE
 
 I usually cleared it with a php-fpm reload, but since ubuntu server init script sends an USR2 instead of an HUP the daemon processes gets killed even if they are actually working on a request.
 
-Yesterday thanks to <a href="http://stackoverflow.com/a/16392464/690839" target="_blank">this</a> post on stackoverflow and thanks to google cached results I've managed to recover the gist he's talking about (he deleted his github account), here it is:
+Yesterday thanks to [this](http://stackoverflow.com/a/16392464/690839){:target='_blank'} post on stackoverflow and thanks to google cached results I've managed to recover the gist he's talking about (he deleted his github account), here it is:
 
 ```php
 <?php
