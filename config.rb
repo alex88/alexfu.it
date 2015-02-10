@@ -1,3 +1,4 @@
+require 'lib/middleman_override'
 require 'lib/blog_categories'
 require 'lib/uuid'
 ###
