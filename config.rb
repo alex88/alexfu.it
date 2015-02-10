@@ -38,7 +38,7 @@ activate :blog do |blog|
   #blog.calendar_template = 'calendar.html'
 end
 activate :directory_indexes
-
+activate :asset_hash
 activate :gzip
 activate :s3_sync do |s3|
   s3.bucket                     = ENV['S3_BUCKET']
@@ -58,7 +58,6 @@ end
 configure :build do
   activate :minify_css
   activate :minify_javascript
-  activate :asset_hash
 end
 
 ready do
