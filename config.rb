@@ -34,11 +34,11 @@ activate :thumbnailer,
 activate :blog do |blog|
   blog.sources = 'posts/{year}-{month}-{day}-{title}.html'
   blog.layout = 'blog_post'
-  #blog.tag_template = 'tag.html'
-  #blog.calendar_template = 'calendar.html'
 end
 activate :directory_indexes
 activate :asset_hash
+# Fix for woff2 files, will be fixed in middleman 4
+extensions.find{ |e| e[0] == :asset_hash }[1].options.setting(:exts).value.push '.woff2'
 activate :gzip
 activate :s3_sync do |s3|
   s3.bucket                     = ENV['S3_BUCKET']
