@@ -20,33 +20,54 @@
     .col-xs-12.col-sm-7
       .box
         %h2 About me
-        %p= lorem.sentences 5
+        %p
+          My name is Alessandro and I'm a software developer working for
+          %a{ href: 'http://visup.it', target: '_blank' } Visup
+          since 2011.
+          %br
+          I currently live in Italy but I'm going to move to the USA in end of 2015 since I've been selected for the
+          %a{ href: 'https://www.dvlottery.state.gov/', target: '_blank' } diversity visa
+          \.
+          %br
+          I develop the frontend and backend of our projects, manage servers and deployments.
       .box.jobs
         %h2 Experiences
         .job.clearfix
           .col-xs-3
-            .where Google
-            .year 2013 - 2014
+            .where Visup
+            .year 2011 - current
           .col-xs-9
-            .profession Front-end developer / php programmer
-            .description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam, et, illum perferendis veritatis velit sunt similique qui magni totam harum tempore eius laboriosam accusantium necessitatibus voluptatum? Enim, itaque dignissimos quia.
-        .job.clearfix
-          .col-xs-3
-            .where Twitter
-            .year 2012
-          .col-xs-9
-            .profession Web Developer
-            .description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam, nihil sit nemo voluptatem praesentium. Quia, qui facere consectetur libero asperiores fugiat consequuntur deserunt culpa repudiandae sed quidem voluptas explicabo soluta.
+            .profession Full stack developer
+            .description Lead developer on various projects using different technologies like: Ruby (on Rails), PHP, HTML, CSS, Javascript, Symfony, MySQL, PostgreSql.
       .box.projects
         %h2 Projects
         .project.clearfix
           .col-xs-3
             .name Closr.it
           .col-xs-9
-            .description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam, et, illum perferendis veritatis velit sunt similique qui magni totam harum tempore eius laboriosam accusantium necessitatibus voluptatum? Enim, itaque dignissimos quia.
+            .description Lead (and only) developer. I've built all the infrastructure and the code that powers Closr.it, starting from the backend with Docker and Ruby on Rails, to the frontend using AngularJS, Sass and Haml
             .technology
-              .title Technologies:
-              .text AWS Ruby
+              .title Technologies used:
+              .text Amazon Web Services, Docker, CircleCI, Ruby on Rails, Sass, Haml, Vips, Chef, AngularJS
+        .project.clearfix
+          .col-xs-3
+            .name GoalShouter.com
+          .col-xs-9
+            .description I've worked for the rebuild of GoalShouter using Symfony and implemented the new features now being used by some of the most important italian Soccer Clubs
+            .technology
+              .title Technologies used:
+              .text Amazon Web Services, Symfony, PHP, Sass, Chef, AngularJS
+        .project.clearfix
+          .col-xs-3
+            .name Other projects
+          .col-xs-9
+            .description I've worked for other smaller projects about data visualization, mobile apps prototypes in javascript and android etc.
+            .technology
+              .title Technologies used:
+              .text Ruby on Rails, Scala, Java, Ember.js, D3, Middleman, jQuery etc.
+      .box
+        %h2 Tools
+        %p During my everyday work I use many tools and services like Git, Github, CircleCI, Chef, Amazon Web Services (EC2, S3, SQS, SNS, Cloudformation, Cloudfront), MySql, PostgreSql, Redis
       .box
         %h2 Where I live
         %iframe{ frameBorder: 0, width: '100%', height: '300px', src: 'https://a.tiles.mapbox.com/v4/alex88.l3558nao/attribution.html?access_token=pk.eyJ1IjoiYWxleDg4IiwiYSI6InlzUzBlbWsifQ.OQjesfjDxWSpicoGjpHYKQ#3/50.90/6.15' }

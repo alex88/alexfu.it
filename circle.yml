@@ -2,6 +2,10 @@ machine:
   ruby:
     version: 2.2.0
 
+compile:
+  override:
+    - echo 'skip'
+
 test:
   override:
     - bundle exec middleman build
