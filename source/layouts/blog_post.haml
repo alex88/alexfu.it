@@ -4,13 +4,15 @@
 
 = wrap_layout :layout do
   .article-page
-    %article
+    %article{ itemscope: true, itemtype: 'http://schema.org/BlogPosting' }
       .row
         .col-xs-12
-          %h1= current_article.title
+          %h1{ itemprop: 'headline' }= current_article.title
           %time{ datetime: current_article.date }
             Posted on
-            = current_article.date.strftime '%D'
+            %meta{ itemprop: 'datePublished', content: current_article.date }= current_article.date.strftime '%D'
+            by
+            %meta{ itemscope: true, itemtype: 'http://schema.org/Person', itemprop: 'name' } Alessandro Tagliapietra
       .row
         .col-xs-12
           = link_to '/index.html' do
@@ -18,7 +20,7 @@
             Back to blog index
       .row
         .col-xs-12
-          .article-content
+          .article-content{ itemprop: 'articleBody' }
             = current_article.body
       .row
         .col-xs-12
