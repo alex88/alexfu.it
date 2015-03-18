@@ -12,8 +12,8 @@
             Posted on
             %meta{ itemprop: 'datePublished', content: current_article.date }= current_article.date.strftime '%D'
             by
-            %meta{ itemscope: true, itemtype: 'http://schema.org/Person' }
-              %meta{ itemprop: 'name' } Alessandro Tagliapietra
+            %span{ itemscope: true, itemtype: 'http://schema.org/Person' }
+              %span{ itemprop: 'name' } Alessandro Tagliapietra
       .row
         .col-xs-12
           = link_to '/index.html' do
