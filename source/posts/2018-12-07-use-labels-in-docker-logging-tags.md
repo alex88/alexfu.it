@@ -18,8 +18,7 @@ Today I've created a docker swarm cluster and I wanted to send all docker logs t
 Since I'm going to deploy the docker containers as stacks with services, I wanted to be able to have a cloudwatch stream
 namd like this: `stack/service/container/id`.
 
-Unfortunately looking at the docker [documentation](https://docs.docker.com/v17.09/engine/admin/logging/log_tags/){:target='_blank'}
-about the tags available when building the stream name it seems it's not possible to have the service and stack name.
+Unfortunately looking at the docker [documentation](https://docs.docker.com/v17.09/engine/admin/logging/log_tags/){:target='_blank'} the tags available aren't enough to have the service and stack name.
 
 READMORE
 
