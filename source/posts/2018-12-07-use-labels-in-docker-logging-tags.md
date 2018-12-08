@@ -47,7 +47,7 @@ you need a log tag option like this:
 {{if (index .ContainerLabels "com.docker.stack.namespace")}}{{index .ContainerLabels "com.docker.stack.namespace"}}/{{end}}{{if (index .ContainerLabels "com.docker.swarm.service.name")}}{{index .ContainerLabels "com.docker.swarm.service.name"}}/{{end}}{{.Name}}/{{.ID}}
 ```
 
-You can set this globally setting your `/etc/docker/daemon.json/ like this:
+You can set this globally setting your `/etc/docker/daemon.json` like this:
 
 ```
 {
